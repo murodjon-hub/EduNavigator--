@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "EduNavigator",
+    "slug": "edu-navigator",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#1565C0"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ilmiyish.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1565C0"
+      },
+      "package": "com.ilmiyish.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single",
+      "name": "EduNavigator",
+      "shortName": "EduNavigator",
+      "description": "Ilmiy ish yozish bo'yicha yordamchi platforma"
+    },
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}
