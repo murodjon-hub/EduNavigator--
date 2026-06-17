@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, Dimensions } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { colors, spacing, borderRadius, typography } from '../theme/colors';
 import { useLanguage } from '../context/LanguageContext';
-
-const { width } = Dimensions.get('window');
+import { useResponsive } from '../hooks/useResponsive';
 
 const SECTION_META = [
   { id: 1, icon: '📖', color: '#1565C0', tab: 'Guide' },
@@ -49,6 +48,7 @@ function LangSwitcher() {
 
 export default function HomeScreen({ navigation }) {
   const { t } = useLanguage();
+  const { isDesktop } = useResponsive();
 
   const handleSectionPress = (meta) => {
     if (meta.screen) {
@@ -71,15 +71,15 @@ export default function HomeScreen({ navigation }) {
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, isDesktop && styles.headerDesktop]}>
           <View style={styles.headerContent}>
-            <AppLogo />
-            <Text style={styles.headerTitle}>{t.home.tagline}</Text>
+            {!isDesktop && <AppLogo />}
+            <Text style={[styles.headerTitle, isDesktop && styles.headerTitleDesktop]}>{t.home.tagline}</Text>
             <Text style={styles.headerSubtitle}>{t.home.subtitle}</Text>
-            <LangSwitcher />
+            {!isDesktop && <LangSwitcher />}
           </View>
           <View style={styles.headerDecoration}>
-            <Text style={styles.decorationIcon}>📚</Text>
+            <Text style={[styles.decorationIcon, isDesktop && styles.decorationIconDesktop]}>📚</Text>
           </View>
         </View>
 
@@ -95,11 +95,11 @@ export default function HomeScreen({ navigation }) {
 
         <Text style={styles.sectionTitle}>{t.home.sections_title}</Text>
 
-        <View style={styles.cardsGrid}>
+        <View style={[styles.cardsGrid, isDesktop && styles.cardsGridDesktop]}>
           {sections.map((section) => (
             <TouchableOpacity
               key={section.id}
-              style={[styles.card, { borderLeftColor: section.color }]}
+              style={[styles.card, { borderLeftColor: section.color }, isDesktop && styles.cardDesktop]}
               onPress={() => handleSectionPress(section)}
               activeOpacity={0.7}
             >
@@ -216,4 +216,29 @@ const styles = StyleSheet.create({
   aboutText: { fontSize: typography.fontSizeSM, color: colors.textSecondary, lineHeight: 22, marginBottom: spacing.md },
   creatorRow: { marginBottom: spacing.xs },
   creatorText: { fontSize: typography.fontSizeSM, color: colors.textSecondary, fontWeight: '500' },
+
+  // ─── Desktop overrides ────────────────────────────────────────────────
+  headerDesktop: {
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing.xxl + 16,
+  },
+  headerTitleDesktop: {
+    fontSize: 30,
+    lineHeight: 38,
+  },
+  decorationIconDesktop: {
+    fontSize: 80,
+  },
+  cardsGridDesktop: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    rowGap: spacing.sm,
+    columnGap: spacing.sm,
+  },
+  cardDesktop: {
+    width: '49%',
+    marginBottom: 0,
+  },
 });

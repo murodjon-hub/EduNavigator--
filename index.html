@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduNavigator — Ilmiy izlanishlar platformasi</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f4ff;
+      color: #0d1b2a;
+      min-height: 100vh;
+    }
+
+    /* ───────────────────────── NAVBAR ───────────────────────── */
+    .navbar {
+      background: #fff;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 56px;
+      box-shadow: 0 2px 20px rgba(21,101,192,0.10);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      background: #1565C0;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      gap: 1px;
+      box-shadow: 0 4px 12px rgba(21,101,192,0.35);
+    }
+    .logo-badge .e { color: #FFD700; }
+    .logo-badge .n { color: #fff; }
+
+    .logo-text {
+      font-size: 21px;
+      font-weight: 800;
+      color: #0d1b2a;
+      letter-spacing: 0.2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: #455a64;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover { color: #1565C0; }
+    .nav-links a.active { color: #1565C0; font-weight: 700; }
+
+    .nav-lang-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      border: 1.5px solid #e3eaf8;
+      border-radius: 24px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      color: #455a64;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .nav-lang-btn:hover { border-color: #1565C0; color: #1565C0; }
+
+    /* ───────────────────────── HERO ───────────────────────── */
+    .hero {
+      background: linear-gradient(115deg,
+        #0d3d91 0%,
+        #1565C0 22%,
+        #1976D2 48%,
+        #2196F3 72%,
+        #64B5F6 100%
+      );
+      padding: 64px 80px 130px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+    }
+
+    /* Subtle radial glow on right */
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(100,181,246,0.35) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Network pattern SVG */
+    .hero-net {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.18;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      flex: 1;
+      max-width: 530px;
+    }
+
+    .hero-title {
+      font-size: 42px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.17;
+      margin-bottom: 18px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: rgba(255,255,255,0.84);
+      line-height: 1.65;
+      margin-bottom: 30px;
+    }
+
+    .hero-lang-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-lang {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 24px;
+      border: 1.5px solid rgba(255,255,255,0.42);
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .hero-lang:hover, .hero-lang.active {
+      background: #fff;
+      color: #1565C0;
+      border-color: #fff;
+    }
+
+    /* ───────────────── BOOKS ILLUSTRATION ───────────────── */
+    .hero-visual {
+      position: relative;
+      z-index: 3;
+      flex: 0 0 340px;
+      height: 280px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .books-wrap {
+      position: relative;
+      width: 260px;
+      height: 260px;
+    }
+
+    /* Glowing circle behind books */
+    .books-glow {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(144,202,249,0.30) 0%, transparent 70%);
+      border: 1px solid rgba(144,202,249,0.20);
+    }
+
+    .books-stack {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      filter: drop-shadow(0 16px 32px rgba(0,0,0,0.28));
+    }
+
+    .grad-cap {
+      font-size: 68px;
+      line-height: 1;
+      margin-bottom: -6px;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+    }
+
+    .book {
+      border-radius: 5px;
+      position: relative;
+    }
+
+    .book::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 12px;
+      border-radius: 5px 0 0 5px;
+      background: rgba(0,0,0,0.18);
+    }
+
+    .book-1 {
+      width: 210px;
+      height: 42px;
+      background: linear-gradient(180deg, #1565C0 0%, #0d47a1 100%);
+      box-shadow: 0 6px 18px rgba(13,71,161,0.5);
+    }
+    .book-2 {
+      width: 195px;
+      height: 44px;
+      background: linear-gradient(180deg, #ff9800 0%, #e65100 100%);
+      box-shadow: 0 6px 18px rgba(230,81,0,0.45);
+    }
+    .book-3 {
+      width: 220px;
+      height: 46px;
+      background: linear-gradient(180deg, #43a047 0%, #2e7d32 100%);
+      box-shadow: 0 8px 24px rgba(46,125,50,0.50);
+    }
+
+    /* ───────────────────────── FEATURES ───────────────────────── */
+    .features-wrap {
+      padding: 0 64px 56px;
+      margin-top: -68px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .features-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-around;
+      box-shadow: 0 12px 56px rgba(21,101,192,0.14);
+    }
+
+    .feat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 18px 12px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: background 0.18s;
+      flex: 1;
+      max-width: 130px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .feat:hover { background: #eef2ff; }
+
+    .feat-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .feat-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .feat-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0d1b2a;
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .feat-desc {
+      font-size: 10.5px;
+      color: #78909c;
+      line-height: 1.45;
+    }
+
+    /* ───────────────────────── FOOTER AREA (optional) ───────────────────────── */
+    .page-bg {
+      background: #f0f4ff;
+      min-height: 40px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
+<nav class="navbar">
+  <a class="logo" href="#">
+    <div class="logo-badge">
+      <span class="e">E</span><span class="n">N</span>
+    </div>
+    <span class="logo-text">EduNavigator</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#" class="active">Bosh sahifa</a></li>
+    <li><a href="#features">Bo'limlar</a></li>
+    <li><a href="#">Namunalar</a></li>
+    <li><a href="#">AI yordamchi</a></li>
+    <li><a href="#">Biz haqimizda</a></li>
+  </ul>
+
+  <button class="nav-lang-btn" onclick="cycleLang(this)">
+    <span id="nav-flag">🇺🇿</span>
+    <span id="nav-lang-label">O'zbek</span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
+</nav>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section class="hero">
+
+  <!-- Network background pattern -->
+  <svg class="hero-net" viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <g stroke="white" stroke-width="1" fill="white">
+      <!-- nodes -->
+      <circle cx="620" cy="60"  r="3.5"/>
+      <circle cx="780" cy="40"  r="2.5"/>
+      <circle cx="900" cy="110" r="4"/>
+      <circle cx="1050" cy="70" r="2.5"/>
+      <circle cx="1140" cy="190" r="3"/>
+      <circle cx="1080" cy="320" r="3.5"/>
+      <circle cx="950" cy="400" r="2.5"/>
+      <circle cx="800" cy="380" r="4"/>
+      <circle cx="680" cy="300" r="2.5"/>
+      <circle cx="720" cy="190" r="3"/>
+      <circle cx="860" cy="220" r="3.5"/>
+      <circle cx="1010" cy="200" r="2.5"/>
+      <circle cx="580" cy="160" r="2.5"/>
+      <!-- lines -->
+      <line x1="620" y1="60" x2="780" y2="40"/>
+      <line x1="780" y1="40" x2="900" y2="110"/>
+      <line x1="900" y1="110" x2="1050" y2="70"/>
+      <line x1="1050" y1="70" x2="1140" y2="190"/>
+      <line x1="1140" y1="190" x2="1080" y2="320"/>
+      <line x1="1080" y1="320" x2="950" y2="400"/>
+      <line x1="950" y1="400" x2="800" y2="380"/>
+      <line x1="800" y1="380" x2="680" y2="300"/>
+      <line x1="680" y1="300" x2="720" y2="190"/>
+      <line x1="720" y1="190" x2="620" y2="60"/>
+      <line x1="720" y1="190" x2="860" y2="220"/>
+      <line x1="860" y1="220" x2="900" y2="110"/>
+      <line x1="860" y1="220" x2="1010" y2="200"/>
+      <line x1="1010" y1="200" x2="1050" y2="70"/>
+      <line x1="1010" y1="200" x2="1080" y2="320"/>
+      <line x1="580" y1="160" x2="620" y2="60"/>
+      <line x1="580" y1="160" x2="720" y2="190"/>
+    </g>
+  </svg>
+
+  <!-- Left: text content -->
+  <div class="hero-content">
+    <h1 class="hero-title" id="hero-title">
+      Ilmiy izlanishlaringiz<br>uchun ishonchli raqamli<br>hamroh!
+    </h1>
+    <p class="hero-sub" id="hero-sub">Bilim oling, izlaning, yarating va muvaffaqiyatga erishing.</p>
+
+    <div class="hero-lang-row">
+      <button class="hero-lang active" onclick="setLang('uz', this)">🇺🇿 O'zbek</button>
+      <button class="hero-lang" onclick="setLang('ru', this)">🇷🇺 Русский</button>
+      <button class="hero-lang" onclick="setLang('en', this)">🇬🇧 English</button>
+    </div>
+  </div>
+
+  <!-- Right: books illustration -->
+  <div class="hero-visual">
+    <div class="books-wrap">
+      <div class="books-glow"></div>
+      <div class="books-stack">
+        <div class="grad-cap">🎓</div>
+        <div class="book book-2"></div>
+        <div class="book book-3"></div>
+        <div class="book book-1"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FEATURE CARDS ═══════════════════════ -->
+<div class="features-wrap" id="features">
+  <div class="features-card">
+
+    <!-- Yo'riqnoma -->
+    <a href="#" class="feat">
+      <div class="feat-icon" style="background:#EEF2FF;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/>
+        </svg>
+      </div>
+      <div class="feat-title" id="feat-1-title">Yo'riqnoma</div>
+      <div class="feat-desc" id="feat-1-desc">Ilmiy ish yozish bosqichlari</div>
+    </a>
+
+    <!-- So'rovnoma -->
+    <a href="#" class="feat">
+      <div class="feat-icon" style="background:#F3E5F5;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#6A1B9A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2"/>
+          <line x1="9" y1="7" x2="15" y2="7"/>
+          <line x1="9" y1="12" x2="15" y2="12"/>
+          <line x1="9" y1="17" x2="12" y2="17"/>
+          <circle cx="7" cy="7" r="0.5" fill="#6A1B9A"/>
+          <circle cx="7" cy="12" r="0.5" fill="#6A1B9A"/>
+          <circle cx="7" cy="17" r="0.5" fill="#6A1B9A"/>
+        </svg>
+      </div>
+      <div class="feat-title" id="feat-2-title">So'rovnoma</div>
+      <div class="feat-desc" id="feat-2-desc">Muammolarni aniqlash</div>
+    </a>
+
+    <!-- Natijalar -->
+    <a href="#" class="feat">
+      <div class="feat-icon" style="background:#E8F5E9;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6"  y1="20" x2="6"  y2="14"/>
+          <line x1="2"  y1="20" x2="22" y2="20"/>
+        </svg>
+      </div>
+      <div class="feat-title" id="feat-3-title">Natijalar</div>
+      <div class="feat-desc" id="feat-3-desc">Statistika va tahlillar</div>
+    </a>
+
+    <!-- Qonunlar -->
+    <a href="#" class="feat">
+      <div class="feat-icon" style="background:#FBE9E7;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#BF360C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v4M12 21v-2"/>
+          <path d="M5 7l2 9M19 7l-2 9"/>
+          <path d="M4 16h6M14 16h6"/>
+          <path d="M7 16a3 3 0 0 0 6 0"/>
+          <path d="M11 16a3 3 0 0 0 6 0"/>
+          <line x1="12" y1="3" x2="5" y2="7"/>
+          <line x1="12" y1="3" x2="19" y2="7"/>
+        </svg>
+      </div>
+      <div class="feat-title" id="feat-4-title">Qonunlar</div>
+      <div class="feat-desc" id="feat-4-desc">Me'yoriy-huquqiy hujjatlar</div>
+    </a>
+
+    <!-- Saytlar -->
+    <a href="#" class="feat">
+      <div class="feat-icon" style="background:#E3F2FD;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </svg>
+      </div>
+      <div class="feat-title" id="feat-5-title">Saytlar va maslahatlar</div>
+      <div class="feat-desc" id="feat-5-desc">Foydali manbalar</div>
+    </a>
+
+    <!-- Namunalar -->
+    <a href="#" class="feat">
+      <div class="feat-icon" style="background:#E0F7FA;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00695C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="8" y1="13" x2="16" y2="13"/>
+          <line x1="8" y1="17" x2="12" y2="17"/>
+        </svg>
+      </div>
+      <div class="feat-title" id="feat-6-title">Namunalar</div>
+      <div class="feat-desc" id="feat-6-desc">Namunaviy shakllar</div>
+    </a>
+
+    <!-- AI yordamchi -->
+    <a href="#" class="feat">
+      <div class="feat-icon" style="background:#EDE7F6;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4527A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="8" width="18" height="12" rx="3"/>
+          <path d="M8 8V6a4 4 0 0 1 8 0v2"/>
+          <circle cx="9" cy="14" r="1.5" fill="#4527A0"/>
+          <circle cx="15" cy="14" r="1.5" fill="#4527A0"/>
+          <line x1="9" y1="18" x2="15" y2="18"/>
+          <line x1="12" y1="4" x2="12" y2="2"/>
+        </svg>
+      </div>
+      <div class="feat-title" id="feat-7-title">AI yordamchi</div>
+      <div class="feat-desc" id="feat-7-desc">Sun'iy intelekt ko'magi</div>
+    </a>
+
+  </div>
+</div>
+
+<div class="page-bg"></div>
+
+<!-- ═══════════════════════ LANGUAGE SCRIPT ═══════════════════════ -->
+<script>
+  const LANGS = {
+    uz: {
+      flag: '🇺🇿', label: "O'zbek",
+      title: "Ilmiy izlanishlaringiz\nuchun ishonchli raqamli\nhamroh!",
+      sub: "Bilim oling, izlaning, yarating va muvaffaqiyatga erishing.",
+      feats: [
+        ["Yo'riqnoma", "Ilmiy ish yozish bosqichlari"],
+        ["So'rovnoma", "Muammolarni aniqlash"],
+        ["Natijalar", "Statistika va tahlillar"],
+        ["Qonunlar", "Me'yoriy-huquqiy hujjatlar"],
+        ["Saytlar va maslahatlar", "Foydali manbalar"],
+        ["Namunalar", "Namunaviy shakllar"],
+        ["AI yordamchi", "Sun'iy intelekt ko'magi"],
+      ],
+    },
+    ru: {
+      flag: '🇷🇺', label: "Русский",
+      title: "Ваш надёжный цифровой\nпомощник в научных\nисследованиях!",
+      sub: "Учитесь, исследуйте, создавайте и достигайте успеха.",
+      feats: [
+        ["Руководство", "Этапы написания работы"],
+        ["Опрос", "Выявление проблем"],
+        ["Результаты", "Статистика и анализ"],
+        ["Законы", "Нормативные документы"],
+        ["Сайты и советы", "Полезные ресурсы"],
+        ["Образцы", "Примеры оформления"],
+        ["ИИ помощник", "Помощь искусственного интеллекта"],
+      ],
+    },
+    en: {
+      flag: '🇬🇧', label: "English",
+      title: "Your reliable digital\npartner for academic\nresearch!",
+      sub: "Learn, explore, create and achieve success.",
+      feats: [
+        ["Guide", "Academic writing steps"],
+        ["Survey", "Problem identification"],
+        ["Results", "Statistics & analysis"],
+        ["Laws", "Regulatory documents"],
+        ["Sites & Tips", "Useful resources"],
+        ["Samples", "Sample templates"],
+        ["AI Assistant", "Artificial intelligence help"],
+      ],
+    },
+  };
+
+  function setLang(code, btn) {
+    const l = LANGS[code];
+
+    // update nav
+    document.getElementById('nav-flag').textContent = l.flag;
+    document.getElementById('nav-lang-label').textContent = l.label;
+
+    // update hero text
+    document.getElementById('hero-title').innerHTML = l.title.replace(/\n/g, '<br>');
+    document.getElementById('hero-sub').textContent = l.sub;
+
+    // update feature cards
+    l.feats.forEach((f, i) => {
+      document.getElementById('feat-' + (i+1) + '-title').textContent = f[0];
+      document.getElementById('feat-' + (i+1) + '-desc').textContent  = f[1];
+    });
+
+    // toggle active button in hero
+    document.querySelectorAll('.hero-lang').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function cycleLang(btn) {
+    const codes = ['uz', 'ru', 'en'];
+    const labels = ['uz', 'ru', 'en'];
+    const current = document.getElementById('nav-lang-label').textContent;
+    const currentIdx = ['O\'zbek', 'Русский', 'English'].indexOf(current);
+    const next = (currentIdx + 1) % 3;
+    const heroBtn = document.querySelectorAll('.hero-lang')[next];
+    setLang(labels[next], heroBtn);
+  }
+</script>
+
+</body>
+</html>

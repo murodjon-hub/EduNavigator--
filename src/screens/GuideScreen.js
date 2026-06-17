@@ -12,6 +12,7 @@ import {
 import { colors, spacing, borderRadius, typography } from '../theme/colors';
 import { useLanguage } from '../context/LanguageContext';
 import { getGuideData } from '../i18n/guideDataI18n';
+import { useResponsive } from '../hooks/useResponsive';
 
 function AccordionItem({ item, index, mundarija, kirishItems, color }) {
   const [expanded, setExpanded] = useState(false);
@@ -68,6 +69,7 @@ function AccordionItem({ item, index, mundarija, kirishItems, color }) {
 export default function GuideScreen({ navigation }) {
   const [activeTab, setActiveTab] = useState('bm');
   const { lang, t } = useLanguage();
+  const { isDesktop } = useResponsive();
   const GUIDE_DATA = getGuideData(lang);
   const data = GUIDE_DATA[activeTab];
   const gt = t.guide;
@@ -108,7 +110,7 @@ export default function GuideScreen({ navigation }) {
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, isDesktop && styles.scrollContentDesktop]}
       >
         {/* Intro Card */}
         <View style={[styles.introCard, { borderLeftColor: data.color }]}>
@@ -355,6 +357,11 @@ const styles = StyleSheet.create({
     color: '#4E342E',
     marginBottom: spacing.sm,
     lineHeight: 20,
+  },
+  scrollContentDesktop: {
+    maxWidth: 820,
+    alignSelf: 'center',
+    width: '100%',
   },
   documentCard: {
     backgroundColor: '#FAFBFF',

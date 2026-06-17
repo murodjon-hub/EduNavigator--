@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import { colors, spacing, borderRadius, typography } from '../theme/colors';
 import { useLanguage } from '../context/LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 
 const RESOURCES = [
   {
@@ -177,6 +178,7 @@ const AI_RESPONSES = {
 
 export default function ResourcesScreen() {
   const { t } = useLanguage();
+  const { isDesktop } = useResponsive();
   const rt = t.resources;
   const [aiInput, setAiInput] = useState('');
   const [messages, setMessages] = useState([{ role: 'ai', text: rt.ai_welcome }]);
@@ -237,7 +239,7 @@ export default function ResourcesScreen() {
         <ScrollView
           style={styles.container}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, isDesktop && styles.scrollContentDesktop]}
         >
           {rt.categories.map((section, sIndex) => (
             <View key={sIndex} style={styles.resourceSection}>
@@ -247,43 +249,42 @@ export default function ResourcesScreen() {
                   {section.category}
                 </Text>
               </View>
-              {section.sites.map((site, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.siteCard}
-                  onPress={async () => {
-                    try {
-                      const supported = await Linking.canOpenURL(site.url);
-                      if (supported) {
-                        await Linking.openURL(site.url);
+              <View style={isDesktop ? styles.sitesGridDesktop : null}>
+                {section.sites.map((site, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[styles.siteCard, isDesktop && styles.siteCardDesktop]}
+                    onPress={() => {
+                      if (Platform.OS === 'web') {
+                        window.location.href = site.url;
                       } else {
-                        Alert.alert(rt.open_err_title, rt.open_err_msg(site.url));
+                        Linking.openURL(site.url).catch(() =>
+                          Alert.alert(rt.net_err_title, rt.net_err_msg(site.url))
+                        );
                       }
-                    } catch {
-                      Alert.alert(rt.net_err_title, rt.net_err_msg(site.url));
-                    }
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <View style={styles.siteInfo}>
-                    <View style={styles.siteTitleRow}>
-                      <Text style={styles.siteName}>{site.name}</Text>
-                      <View style={[styles.siteTag, { backgroundColor: site.tagColor + '20' }]}>
-                        <Text style={[styles.siteTagText, { color: site.tagColor }]}>{site.tag}</Text>
+                    }}
+                    activeOpacity={0.7}
+                  >
+                    <View style={styles.siteInfo}>
+                      <View style={styles.siteTitleRow}>
+                        <Text style={styles.siteName}>{site.name}</Text>
+                        <View style={[styles.siteTag, { backgroundColor: site.tagColor + '20' }]}>
+                          <Text style={[styles.siteTagText, { color: site.tagColor }]}>{site.tag}</Text>
+                        </View>
                       </View>
+                      <Text style={styles.siteDesc}>{site.desc}</Text>
+                      <Text style={styles.siteUrl}>{site.url}</Text>
                     </View>
-                    <Text style={styles.siteDesc}>{site.desc}</Text>
-                    <Text style={styles.siteUrl}>{site.url}</Text>
-                  </View>
-                  <Text style={[styles.openIcon, { color: section.color }]}>↗</Text>
-                </TouchableOpacity>
-              ))}
+                    <Text style={[styles.openIcon, { color: section.color }]}>↗</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
           ))}
         </ScrollView>
       ) : (
         <KeyboardAvoidingView
-          style={styles.aiContainer}
+          style={[styles.aiContainer, isDesktop && styles.aiContainerDesktop]}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={90}
         >
@@ -564,5 +565,23 @@ const styles = StyleSheet.create({
   sendIcon: {
     color: colors.white,
     fontSize: 16,
+  },
+  sitesGridDesktop: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
+  siteCardDesktop: {
+    width: '49%',
+  },
+  aiContainerDesktop: {
+    maxWidth: 700,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  scrollContentDesktop: {
+    maxWidth: 1100,
+    alignSelf: 'center',
+    width: '100%',
   },
 });

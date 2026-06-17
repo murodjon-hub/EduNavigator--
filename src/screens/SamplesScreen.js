@@ -7,11 +7,12 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
-  Alert,
   Modal,
+  Platform,
 } from 'react-native';
 import { colors, spacing, borderRadius, typography } from '../theme/colors';
 import { useLanguage } from '../context/LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 
 const SAMPLES = [
   {
@@ -88,11 +89,20 @@ const SAMPLES = [
       predmet: 'Matematika darslarida miqdor tushunchasini shakllantirish metodikasi',
       hajm: '2 bob, 4 bo\'limdan, shuningdek foydalanilgan adabiyotlar mavjud',
     },
+    methods: [
+      'Kuzatish metodi — real hayotdagi narsalarni miqdoriy jihatdan tahlil qilish',
+      'Amaliy (tajriba) metodi — lineyka, tarozi, soat, idish bilan o\'lchash',
+      'Illyustratsiya va ko\'rgazmali metod — plakat, rasm, video, real buyumlar',
+      'Suhbat va savol-javob metodi — o\'quvchilar bilan ochiq muloqot',
+      'Taqqoslash va guruhlash metodi — ikki miqdorni solishtirish (katta/kichik)',
+      'O\'yin usuli — "Eng og\'ir narsa top", "Soat necha bo\'ldi?" o\'yinlari',
+      'Ko\'rgazmalilik usuli — rangli kubiklar, mevalar, raqamli kartochkalar',
+    ],
     tips: [
       'Kirish qismi to\'liq va aniq yozilgan (dolzarbligi, maqsad, vazifalari)',
       'Nazariy asos kuchli — miqdor turlari tasniflanган',
-      'Dars ishlanmasi mavjud (3-sinf, Narx-miqdor-qiymat)',
-      'Ko\'rgazmali va o\'yinli metodlar batafsil ko\'rsatilgan',
+      'Dars ishlanmasi mavjud (3-sinf, Narx-miqdor-qiymat mavzusi)',
+      '7 ta o\'qitish metodi batafsil tavsiflanган',
       '32 ta manba — O\'zbek va xalqaro adabiyotlar',
     ],
   },
@@ -151,6 +161,155 @@ const SAMPLES = [
       'Qisqa va aniq yozilgan',
     ],
   },
+  {
+    id: 7,
+    type: 'Dissertatsiya',
+    icon: '🏆',
+    color: '#BF360C',
+    title: 'Boshlang\'ich sinf o\'quvchilarida emotsional liderlik qobiliyatini shakllantirish',
+    faculty: 'Boshlang\'ich ta\'lim (Nizomiy nomidagi O\'zMPU)',
+    year: '2026',
+    pages: 106,
+    rating: '5.0',
+    author: 'Ismoilova Nozima O\'ktam qizi',
+    supervisor: 'O\'zbekiston Milliy Pedagogika Universiteti',
+    university: 'Nizomiy nomidagi O\'zbekiston Milliy Pedagogika Universiteti',
+    description: 'Boshlang\'ich sinf o\'quvchilarida (7-11 yosh) emotsional liderlik qobiliyatini shakllantirishning pedagogik xususiyatlari — 3 ta trening, 7 ta diagnostik metod va dars ishlanmasi bilan.',
+    sections: [
+      'ANNOTATSIYA (o\'zbek, rus, ingliz tillarida)',
+      'KIRISH',
+      'I BOB: Emotsional liderlik qobiliyatini shakllantirishning nazariy asoslari',
+      '  1.1. Emotsional liderlik tushunchasi va uning psixologik-pedagogik mohiyati',
+      '  1.2. Boshlang\'ich sinf o\'quvchilarida emotsional liderlik xususiyatlari',
+      'II BOB: Emotsional liderlik qobiliyatini shakllantirishning pedagogik shartlari',
+      '  2.1. Shakllantirish metodlari va vositalari (3 ta trening)',
+      '  2.2. Tajriba-sinov ishi natijalari tahlili',
+      'XULOSA',
+      'FOYDALANILGAN ADABIYOTLAR',
+      'ILOVALAR (so\'rovnoma, dars ishlanmasi)',
+    ],
+    kirish: {
+      dolzarbligi: 'Zamonaviy ta\'limda o\'quvchilarning emotsional intellekti va liderlik qobiliyatlarini rivojlantirish dolzarb muammo bo\'lib, boshlang\'ich sinf yoshidagi bolalarda bu ko\'nikmalarni shakllantirish ularning keyingi hayotiy muvaffaqiyatlariga poydevor bo\'ladi.',
+      maqsad: 'Boshlang\'ich sinf o\'quvchilarida emotsional liderlik qobiliyatini shakllantirishning pedagogik xususiyatlarini ilmiy asoslash va amaliy tavsiyalar ishlab chiqish.',
+      vazifalar: [
+        'Emotsional liderlik tushunchasining nazariy asoslarini o\'rganish',
+        'Boshlang\'ich sinf o\'quvchilarining yosh xususiyatlarini tahlil qilish',
+        'Emotsional liderlik qobiliyatini shakllantirish metodlarini aniqlash',
+        'Tajriba-sinov ishi o\'tkazish va natijalarini tahlil qilish',
+      ],
+      obyekt: 'Boshlang\'ich sinf o\'quvchilarining ta\'lim-tarbiya jarayoni',
+      predmet: 'Boshlang\'ich sinf o\'quvchilarida emotsional liderlik qobiliyatini shakllantirishning pedagogik xususiyatlari',
+    },
+    trainings: [
+      {
+        name: '"Men lider bo\'la olaman!" treningi',
+        stages: [
+          '1-bosqich: Motivatsiya — o\'quvchilarda qiziqish uyg\'otish',
+          '2-bosqich: Emotsiyalarni aniqlash — his-tuyg\'ularni tanib olish',
+          '3-bosqich: Rolli o\'yinlar — liderlik vaziyatlarini modellashtirish',
+          '4-bosqich: Refleksiya — tajribani muhokama qilish',
+          '5-bosqich: Yakuniy rag\'bat — muvaffaqiyatlarni mustahkamlash',
+        ],
+      },
+      {
+        name: '"Mini-liderlik vazifalari" treningi',
+        stages: [
+          'Guruh ishi — jamoa bilan ishlash ko\'nikmasi',
+          'Mini-loyihalar — kichik liderlik topshiriqlari',
+        ],
+      },
+      {
+        name: '"Hislar svetofori" treningi',
+        stages: [
+          '🔴 Qizil — to\'xta va his-tuyg\'ularingni his qil',
+          '🟡 Sariq — o\'yla va yechim top',
+          '🟢 Yashil — harakat qil va boshqalar bilan bo\'lish',
+        ],
+      },
+    ],
+    methods: [
+      'Emotsiyalarni aniqlash testi',
+      'Empatiyani o\'lchash testi',
+      'Bolalar liderligi anketasi',
+      'Sotsiometriya usuli',
+      'Vaziyatli rasm-test',
+      'Tengdoshiga yordam bera oladimi? (kuzatuv)',
+      'Mini-rol o\'yinlari',
+    ],
+    tips: [
+      'Haqiqiy magistrlik dissertatsiyasi — O\'zMPU, 2026 yil',
+      '7-11 yoshli boshlang\'ich sinf o\'quvchilariga mo\'ljallangan',
+      '3 ta original trening dasturi (bosqichma-bosqich)',
+      '7 ta diagnostik metod qo\'llanilgan',
+      '3-sinf o\'quvchilari uchun 10 savollik so\'rovnoma (3-ilova)',
+      'Tarbiyaviy soat dars ishlanmasi mavjud (40-45 daqiqa)',
+      '106 sahifa, to\'liq ilmiy tuzilma',
+    ],
+  },
+  {
+    id: 8,
+    type: 'BMI',
+    icon: '🏅',
+    color: '#1565C0',
+    title: 'Boshlang\'ich sinf o\'quvchilarida an\'anaviy ekskursiya va virtual sayohat orqali vatanparvarlik tuyg\'usini shakllantirish',
+    faculty: 'Boshlang\'ich ta\'lim (405-guruh)',
+    year: '2024',
+    pages: 71,
+    rating: '5.0',
+    author: 'Xudoyberdiyeva Sayyora Qilich qizi',
+    supervisor: 'PhD, dotsent K.A.Abrorxonova',
+    university: 'Nizomiy nomidagi Toshkent Davlat Pedagogika Universiteti',
+    description: 'Boshlang\'ich sinf o\'quvchilarida an\'anaviy ekskursiya va virtual sayohat orqali vatanparvarlik tuyg\'usini shakllantirish metodlari, darsliklar tahlili va Toshkent 102-maktabda 67 o\'quvchi bilan o\'tkazilgan tajriba-sinov ishlari.',
+    sections: [
+      'KIRISH (p.3)',
+      'I BOB: Vatanparvarlik tuyg\'usini shakllantirishning ilmiy-nazariy asoslari (p.8)',
+      '  1.1. An\'anaviy ekskursiyalarni tashkil etish — pedagogik muammo sifatida (p.8)',
+      '  1.2. Virtual sayohatlarning turlari va ularning yaratilish tarixi (p.16)',
+      '  I bobga xulosa (p.23)',
+      'II BOB: Vatanparvarlik tuyg\'usini shakllantirish metodlari (p.24)',
+      '  2.1. Darsliklar tahlili asosida mavjud holat (p.24)',
+      '  2.2. Darslarni takomillashtirishda virtual sayohatdan foydalanish imkoniyatlari (p.32)',
+      '  II bobga xulosa (p.41)',
+      'III BOB: Tajriba-sinov ishlari va tahlil (p.42)',
+      '  3.1. Virtual sayohat asosida darslarni tashkil etish (p.42)',
+      '  3.2. Tajriba-sinov ishlari natijalari va tahlil (p.48)',
+      '  III bobga xulosa (p.55)',
+      'UMUMIY XULOSA (p.56)',
+      'FOYDALANILGAN ADABIYOTLAR — 91 ta manba (p.58)',
+      'GLOSSARIY (p.66)',
+      'ILOVALAR — anketa so\'rovnoma (p.71)',
+    ],
+    kirish: {
+      dolzarbligi: 'Boshlang\'ich sinf o\'quvchilarida vatanparvarlik tuyg\'usini shakllantirishda ekskursiya turizmi muhim o\'rin tutadi. Zamonaviy ta\'limda virtual sayohat innovatsion metod sifatida tobora keng qo\'llanilmoqda va an\'anaviy ekskursiya bilan birgalikda yuksak samara beradi.',
+      maqsad: 'Boshlang\'ich sinf o\'quvchilarida an\'anaviy ekskursiya va virtual sayohat orqali vatanparvarlik tuyg\'usini shakllantirishning mavjud holatini o\'rganish hamda samarali metodlarni ishlab chiqish.',
+      vazifalar: [
+        'Vatanparvarlik tuyg\'usini shakllantirishning hozirgi holatini o\'rganish va tahlil qilish',
+        'An\'anaviy ekskursiya va virtual sayohatning ilmiy-metodik ahamiyatini o\'rganish',
+        'Vatanparvarlik tuyg\'usini shakllantirish uchun samarali metodlarni ishlab chiqish',
+        'An\'anaviy ekskursiya va virtual sayohat darslarini tashkil etish xususiyatlarini aniqlash',
+      ],
+      obyekt: 'Boshlang\'ich sinf o\'quvchilarida an\'anaviy ekskursiya va virtual sayohat orqali vatanparvarlik tuyg\'usini shakllantirish jarayoni',
+      predmet: 'Boshlang\'ich sinf o\'quvchilarida an\'anaviy ekskursiya va virtual sayohat orqali vatanparvarlik tuyg\'usini shakllantirishning metodlari va vositalari',
+    },
+    methods: [
+      'An\'anaviy ekskursiya — muzeylar, tarixiy joylar, teatrlar ziyoratlari',
+      'Virtual sayohat — multimedia, slayd-shou, onlayn tur texnologiyalari',
+      'Darsliklar tahlili metodi (1–4-sinf "Dunyoni bilamiz", "Ona tili")',
+      'Anketa so\'rovnoma usuli (o\'quvchi va o\'qituvchilar uchun)',
+      'Pedagogik kuzatish (sinfdagi faoliyat jarayonida)',
+      'Tajriba-sinov ishi (2023-2024 o\'q.y., Shayxontohur 102-maktab, 4-sinf)',
+      'Matematik-statistik tahlil (V.Bespalko samaradorlik formulasi)',
+    ],
+    tips: [
+      'Haqiqiy BMI — TDPU Boshlang\'ich ta\'lim fakulteti, 2024 yil',
+      '3 bob, 6 fasl, glossariy va ilovalar bilan to\'liq tuzilma',
+      'An\'anaviy va virtual ekskursiyalar qiyosiy tahlili jadvalda ko\'rsatilgan',
+      '67 o\'quvchi ishtirokida Toshkent 102-maktabda tajriba-sinov o\'tkazilgan',
+      'Samaradorlik darajasi V.Bespalko formulasi bilan isbotlangan (mT > mH)',
+      '91 ta manba — O\'zbek, rus va ingliz tillarida',
+      'UDK: 37.22:681.142.37',
+    ],
+  },
 ];
 
 const TEMPLATES = [
@@ -159,33 +318,79 @@ const TEMPLATES = [
     icon: '📄',
     desc: 'O\'zMPU standart shakli',
     color: '#1565C0',
+    wordFile: 'bmi-titul.docx',
   },
   {
-    name: 'Kurs ishi reja shakli',
+    name: 'Kurs ishi titul varog\'i',
     icon: '📋',
     desc: 'Standart reja shablon',
     color: '#6A1B9A',
+    wordFile: 'kurs-ishi-titul.docx',
   },
   {
-    name: 'Adabiyotlar ro\'yxati (GOST)',
-    icon: '📚',
-    desc: 'GOST 7.32 uslubida',
-    color: '#00695C',
-  },
-  {
-    name: 'Dissertatsiya annotatsiya',
+    name: 'Dissertatsiya titul namuna',
     icon: '📝',
-    desc: '3 tilda annotatsiya shakli',
+    desc: 'Magistratura standart shakli',
     color: '#BF360C',
+    wordFile: 'dissertatsiya-titul.docx',
   },
 ];
 
+function TemplateWordModal({ template, visible, onClose }) {
+  if (!template) return null;
+  const fileUrl = `/words/${template.wordFile}`;
+
+  const handleDownload = () => {
+    if (Platform.OS === 'web') {
+      const a = document.createElement('a');
+      a.href = fileUrl;
+      a.download = template.wordFile;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
+
+  return (
+    <Modal visible={visible} animationType="fade" transparent>
+      <View style={styles.templateModalOverlay}>
+        <View style={[styles.templateModalContent, { height: 'auto' }]}>
+          <View style={[styles.modalHeader, { backgroundColor: template.color }]}>
+            <Text style={styles.modalIcon}>{template.icon}</Text>
+            <Text style={styles.modalTitle}>{template.name}</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Text style={styles.closeText}>✕</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.wordPreviewBody}>
+            <Text style={styles.wordPreviewIcon}>📄</Text>
+            <Text style={styles.wordPreviewName}>{template.name}</Text>
+            <Text style={styles.wordPreviewDesc}>{template.desc}</Text>
+            <Text style={styles.wordPreviewFile}>{template.wordFile}</Text>
+            <TouchableOpacity
+              style={[styles.wordDownloadBtn, { backgroundColor: template.color }]}
+              onPress={handleDownload}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.wordDownloadText}>⬇️ Word faylni yuklab olish</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.wordCloseBtn} onPress={onClose}>
+              <Text style={styles.wordCloseBtnText}>Yopish</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 function SampleModal({ sample, visible, onClose }) {
+  const { isDesktop } = useResponsive();
   if (!sample) return null;
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
+    <Modal visible={visible} animationType={isDesktop ? 'fade' : 'slide'} transparent>
+      <View style={[styles.modalOverlay, isDesktop && styles.modalOverlayDesktop]}>
+        <View style={[styles.modalContent, isDesktop && styles.modalContentDesktop]}>
           <View style={[styles.modalHeader, { backgroundColor: sample.color }]}>
             <Text style={styles.modalIcon}>{sample.icon}</Text>
             <Text style={styles.modalTitle}>{sample.title}</Text>
@@ -231,6 +436,29 @@ function SampleModal({ sample, visible, onClose }) {
                 </View>
               </>
             )}
+            {sample.trainings && (
+              <>
+                <Text style={styles.modalSectionTitle}>🎯 Trening dasturlari:</Text>
+                {sample.trainings.map((tr, i) => (
+                  <View key={i} style={styles.trainingBox}>
+                    <Text style={styles.trainingName}>{tr.name}</Text>
+                    {tr.stages.map((st, j) => (
+                      <Text key={j} style={styles.trainingStage}>{st}</Text>
+                    ))}
+                  </View>
+                ))}
+              </>
+            )}
+            {sample.methods && (
+              <>
+                <Text style={styles.modalSectionTitle}>🔬 Diagnostik metodlar:</Text>
+                <View style={styles.kirishBox}>
+                  {sample.methods.map((m, i) => (
+                    <Text key={i} style={styles.kirishRow}>  {i + 1}. {m}</Text>
+                  ))}
+                </View>
+              </>
+            )}
             <TouchableOpacity
               style={[styles.downloadBtn, { backgroundColor: sample.color }]}
               onPress={onClose}
@@ -246,10 +474,13 @@ function SampleModal({ sample, visible, onClose }) {
 
 export default function SamplesScreen() {
   const { t } = useLanguage();
+  const { isDesktop } = useResponsive();
   const st = t.samples;
   const [filter, setFilter] = useState('all');
   const [selectedSample, setSelectedSample] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [templateVisible, setTemplateVisible] = useState(false);
 
   const filters = [
     { key: 'all', label: st.filter_all },
@@ -291,10 +522,11 @@ export default function SamplesScreen() {
       >
         {/* Samples */}
         <Text style={styles.sectionTitle}>📚 Namuna ishlar ({filtered.length})</Text>
+        <View style={isDesktop ? styles.samplesGridDesktop : null}>
         {filtered.map((sample) => (
           <TouchableOpacity
             key={sample.id}
-            style={styles.sampleCard}
+            style={[styles.sampleCard, isDesktop && styles.sampleCardDesktop]}
             onPress={() => {
               setSelectedSample(sample);
               setModalVisible(true);
@@ -316,21 +548,19 @@ export default function SamplesScreen() {
             <Text style={[styles.sampleArrow, { color: sample.color }]}>›</Text>
           </TouchableOpacity>
         ))}
+        </View>
 
         {/* Templates */}
         <Text style={styles.sectionTitle}>📋 Shablonlar va andozalar</Text>
-        <View style={styles.templatesGrid}>
+        <View style={[styles.templatesGrid, isDesktop && styles.templatesGridDesktop]}>
           {TEMPLATES.map((t, i) => (
             <TouchableOpacity
               key={i}
-              style={styles.templateCard}
-              onPress={() =>
-                Alert.alert(
-                  t.name,
-                  'Shablon yuklab olish funksiyasi keyingi versiyada qo\'shiladi.',
-                  [{ text: 'OK' }]
-                )
-              }
+              style={[styles.templateCard, isDesktop && styles.templateCardDesktop]}
+              onPress={() => {
+                setSelectedTemplate(t);
+                setTemplateVisible(true);
+              }}
               activeOpacity={0.7}
             >
               <View style={[styles.templateIconBg, { backgroundColor: t.color + '15' }]}>
@@ -338,7 +568,7 @@ export default function SamplesScreen() {
               </View>
               <Text style={[styles.templateName, { color: t.color }]}>{t.name}</Text>
               <Text style={styles.templateDesc}>{t.desc}</Text>
-              <Text style={[styles.downloadLink, { color: t.color }]}>⬇️ Yuklab olish</Text>
+              <Text style={[styles.downloadLink, { color: t.color }]}>👁️ Ko'rish</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -362,6 +592,11 @@ export default function SamplesScreen() {
         sample={selectedSample}
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
+      />
+      <TemplateWordModal
+        template={selectedTemplate}
+        visible={templateVisible}
+        onClose={() => setTemplateVisible(false)}
       />
     </SafeAreaView>
   );
@@ -668,5 +903,114 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: typography.fontSizeMD,
     fontWeight: '700',
+  },
+
+  // ─── Desktop overrides ────────────────────────────────────────────────
+  samplesGridDesktop: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+  },
+  sampleCardDesktop: {
+    width: '49%',
+  },
+  templatesGridDesktop: {
+    gap: spacing.sm,
+  },
+  templateCardDesktop: {
+    width: '32%',
+  },
+  modalOverlayDesktop: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContentDesktop: {
+    borderRadius: 20,
+    maxWidth: 640,
+    width: '90%',
+    maxHeight: '85%',
+  },
+  templateModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.65)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.md,
+  },
+  templateModalContent: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    width: '95%',
+    height: '90%',
+    overflow: 'hidden',
+  },
+  trainingBox: {
+    backgroundColor: '#FBE9E7',
+    borderRadius: borderRadius.md,
+    padding: spacing.sm,
+    marginBottom: spacing.sm,
+    borderLeftWidth: 3,
+    borderLeftColor: '#BF360C',
+  },
+  trainingName: {
+    fontSize: typography.fontSizeSM,
+    fontWeight: '700',
+    color: '#BF360C',
+    marginBottom: spacing.xs,
+  },
+  trainingStage: {
+    fontSize: typography.fontSizeXS,
+    color: '#4E342E',
+    lineHeight: 18,
+    marginBottom: 2,
+  },
+  wordPreviewBody: {
+    padding: spacing.xl,
+    alignItems: 'center',
+  },
+  wordPreviewIcon: {
+    fontSize: 56,
+    marginBottom: spacing.sm,
+  },
+  wordPreviewName: {
+    fontSize: typography.fontSizeLG,
+    fontWeight: '800',
+    color: colors.text,
+    textAlign: 'center',
+    marginBottom: spacing.xs,
+  },
+  wordPreviewDesc: {
+    fontSize: typography.fontSizeSM,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginBottom: spacing.xs,
+  },
+  wordPreviewFile: {
+    fontSize: typography.fontSizeXS,
+    color: colors.textLight,
+    marginBottom: spacing.lg,
+  },
+  wordDownloadBtn: {
+    borderRadius: borderRadius.lg,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.xl,
+    alignItems: 'center',
+    marginBottom: spacing.sm,
+    width: '100%',
+  },
+  wordDownloadText: {
+    color: colors.white,
+    fontSize: typography.fontSizeMD,
+    fontWeight: '700',
+  },
+  wordCloseBtn: {
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.xl,
+    alignItems: 'center',
+  },
+  wordCloseBtnText: {
+    fontSize: typography.fontSizeSM,
+    color: colors.textSecondary,
+    fontWeight: '600',
   },
 });

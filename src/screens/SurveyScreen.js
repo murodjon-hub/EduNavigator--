@@ -13,6 +13,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, spacing, borderRadius, typography } from '../theme/colors';
 import { useLanguage } from '../context/LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 
 const SURVEY_QUESTIONS = [
   {
@@ -180,6 +181,7 @@ export default function SurveyScreen({ navigation }) {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { t } = useLanguage();
+  const { isDesktop } = useResponsive();
   const st = t.survey;
 
   const handleSingleSelect = (questionId, option) => {
@@ -276,7 +278,7 @@ export default function SurveyScreen({ navigation }) {
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, isDesktop && styles.scrollContentDesktop]}
       >
         {SURVEY_QUESTIONS.map((question, qIndex) => (
           <View key={question.id} style={styles.questionCard}>
@@ -613,5 +615,10 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: typography.fontSizeMD,
     fontWeight: '600',
+  },
+  scrollContentDesktop: {
+    maxWidth: 720,
+    alignSelf: 'center',
+    width: '100%',
   },
 });

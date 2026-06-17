@@ -10,6 +10,7 @@ import {
   Linking,
 } from 'react-native';
 import { colors, spacing, borderRadius, typography } from '../theme/colors';
+import { useResponsive } from '../hooks/useResponsive';
 
 const LAWS = [
   {
@@ -308,6 +309,7 @@ function LawItem({ item }) {
 }
 
 export default function LawsScreen({ navigation }) {
+  const { isDesktop } = useResponsive();
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar barStyle="light-content" backgroundColor={colors.primary} />
@@ -323,7 +325,7 @@ export default function LawsScreen({ navigation }) {
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, isDesktop && styles.scrollContentDesktop]}
       >
         {/* Info Banner */}
         <View style={styles.infoBanner}>
@@ -335,8 +337,9 @@ export default function LawsScreen({ navigation }) {
         </View>
 
         {/* Laws by Category */}
+        <View style={isDesktop ? styles.lawsCategoriesDesktop : null}>
         {LAWS.map((category) => (
-          <View key={category.id} style={styles.categorySection}>
+          <View key={category.id} style={[styles.categorySection, isDesktop && styles.categorySectionDesktop]}>
             <View style={[styles.categoryHeader, { borderLeftColor: category.color }]}>
               <Text style={styles.categoryIcon}>{category.icon}</Text>
               <Text style={[styles.categoryTitle, { color: category.color }]}>
@@ -348,6 +351,7 @@ export default function LawsScreen({ navigation }) {
             ))}
           </View>
         ))}
+        </View>
 
         {/* Requirements */}
         {REQUIREMENTS.map((req, index) => (
@@ -586,5 +590,18 @@ const styles = StyleSheet.create({
   linkArrow: {
     color: colors.primary,
     fontWeight: '700',
+  },
+  scrollContentDesktop: {
+    maxWidth: 1100,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  lawsCategoriesDesktop: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.md,
+  },
+  categorySectionDesktop: {
+    width: '48%',
   },
 });

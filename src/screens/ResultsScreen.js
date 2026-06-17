@@ -7,12 +7,10 @@ import {
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, spacing, borderRadius, typography } from '../theme/colors';
-
-const { width } = Dimensions.get('window');
+import { useResponsive } from '../hooks/useResponsive';
 
 function BarChart({ data, color }) {
   const max = Math.max(...data.map((d) => d.count), 1);
@@ -95,6 +93,7 @@ const DIFFICULTY_DATA = [
 
 export default function ResultsScreen({ navigation }) {
   const [localResponses, setLocalResponses] = useState(0);
+  const { isDesktop } = useResponsive();
   const totalResponses = 528;
   const avgDifficulty = '3.9';
 
@@ -121,7 +120,7 @@ export default function ResultsScreen({ navigation }) {
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, isDesktop && styles.scrollContentDesktop]}
       >
         {/* Summary Cards */}
         <View style={styles.summaryRow}>
@@ -388,5 +387,10 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: typography.fontSizeMD,
     fontWeight: '700',
+  },
+  scrollContentDesktop: {
+    maxWidth: 900,
+    alignSelf: 'center',
+    width: '100%',
   },
 });
