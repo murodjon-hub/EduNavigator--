@@ -18,6 +18,7 @@ import { colors, spacing, borderRadius, typography } from '../theme/colors';
 import { useLanguage } from '../context/LanguageContext';
 import { useResponsive } from '../hooks/useResponsive';
 import { AI_PROXY_URL } from '../config';
+import { findAnswer, getSuggestions } from '../data/assistantKnowledge';
 
 const RESOURCES = [
   {
@@ -162,25 +163,14 @@ const RESOURCES = [
   },
 ];
 
-const AI_SUGGESTIONS = [
-  'BM kirish qismini qanday yozaman?',
-  'Dissertatsiya uchun mavzu topishda yordam ber',
-  'Kurs ishi adabiyotlar ro\'yxatini qanday rasmiylashaman?',
-  'Ilmiy uslub bilan oddiy uslub farqi nima?',
-  'Plagiarizm nisbatini kamaytirish uchun nima qilsam bo\'ladi?',
-  'Google Scholar da maqola qidirish usullari',
-];
-
-const AI_RESPONSES = {
-  default: (question) => `🤖 "${question}" haqida:\n\nBu savolga javob berish uchun kursim bo'yicha eng foydali ma'lumot:\n\nIlmiy ish yozishda eng muhim qadamlar:\n1. Mavzuni to'liq tushunish\n2. Adabiyotlarni tizimli ko'rib chiqish\n3. Ilmiy uslubda yozish\n4. Plagiarizm tekshiruvi\n\nBatafsil ma'lumot uchun Yo'riqnoma bo'limiga o'ting.`,
-  bm: `🤖 BM kirish qismi:\n\n**Kirish qismiga kiritish kerak:**\n• Mavzuning dolzarbligi (nima uchun muhim?)\n• Tadqiqot maqsadi (nima uchun yozyapsiz?)\n• Vazifalar (maqsadni qanday amalga oshirasiz?)\n• Ob'ekt (nimani o'rganasiz?)\n• Predmet (qaysi tomonini o'rganasiz?)\n• Ish tuzilishi\n\n**Hajm:** 3-5 bet\n**Maslahat:** Kirishni oxirida yozing — asosiy qismni yozgandan keyin.`,
-  plagiarizm: `🤖 Plagiarizm kamaytirish usullari:\n\n1. **Parafrazlash** — g'oyani o'z so'zingiz bilan ifodalang\n2. **To'g'ri iqtibos** — manba ko'rsating (Muallif, yil, bet)\n3. **Sintez** — bir nechta manbadan g'oyalarni birlashtiring\n4. **O'z tahlili** — faqat manba keltirmay, o'zingizning fikrni qo'shing\n5. **Antiplagiat.uz** — topshirishdan oldin tekshiring\n\n**Minimal original matn:** BM uchun 70%, Magistrlik uchun 85%`,
-};
+// Suggestions and answers both come from src/data/assistantKnowledge.js, which
+// builds them out of the same guide content the Yo'riqnoma screen displays.
 
 export default function ResourcesScreen() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { isDesktop } = useResponsive();
   const rt = t.resources;
+  const suggestions = getSuggestions(lang);
   const [aiInput, setAiInput] = useState('');
   const [isThinking, setIsThinking] = useState(false);
   const [messages, setMessages] = useState([{ role: 'ai', text: rt.ai_welcome }]);
@@ -190,17 +180,7 @@ export default function ResourcesScreen() {
   const scrollToEnd = () =>
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
 
-  // Used before the Worker is deployed, and whenever it cannot be reached.
-  const scriptedReply = (question) => {
-    const lower = question.toLowerCase();
-    if (lower.includes('bm') || lower.includes('bitiruv') || lower.includes('kirish')) {
-      return AI_RESPONSES.bm;
-    }
-    if (lower.includes('plagiarizm') || lower.includes('original')) {
-      return AI_RESPONSES.plagiarizm;
-    }
-    return AI_RESPONSES.default(question);
-  };
+  const localReply = (question) => findAnswer(question, lang);
 
   const handleAiSend = async () => {
     if (!aiInput.trim() || isThinking) return;
@@ -212,7 +192,7 @@ export default function ResourcesScreen() {
     scrollToEnd();
 
     if (!AI_PROXY_URL) {
-      setMessages([...newMessages, { role: 'ai', text: scriptedReply(userMsg) }]);
+      setMessages([...newMessages, { role: 'ai', text: localReply(userMsg) }]);
       scrollToEnd();
       return;
     }
@@ -242,7 +222,7 @@ export default function ResourcesScreen() {
       setMessages([...newMessages, { role: 'ai', text: answer }]);
     } catch {
       // Offline or the Worker is down: still give the student something useful.
-      setMessages([...newMessages, { role: 'ai', text: scriptedReply(userMsg) }]);
+      setMessages([...newMessages, { role: 'ai', text: localReply(userMsg) }]);
     } finally {
       setIsThinking(false);
       scrollToEnd();
@@ -334,7 +314,7 @@ export default function ResourcesScreen() {
           {/* Suggestions */}
           <View style={styles.suggestionsBar}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {AI_SUGGESTIONS.map((s, i) => (
+              {suggestions.map((s, i) => (
                 <TouchableOpacity
                   key={i}
                   style={styles.suggestionChip}
