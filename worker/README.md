@@ -18,13 +18,27 @@ Copy it. Do not paste it into any file in this repo.
 
 ```bash
 cd worker
-npx wrangler login          # opens a browser once
-npx wrangler secret put GEMINI_API_KEY   # paste the key when prompted
-npx wrangler deploy
+npx wrangler login     # opens a browser once, approve access
+npx wrangler deploy    # creates the Worker, prints its URL
+npx wrangler secret put GEMINI_API_KEY
 ```
 
+Deploy before setting the secret, so the Worker exists when the secret is
+attached. The secret takes effect immediately — no second deploy needed.
+
+The last command asks for the key and waits. **Type the key at that prompt —
+do not write it into this command, this file, or any other file in the repo.**
+Anything committed here ends up public on GitHub. A key pasted into a file
+must be treated as leaked: revoke it at <https://aistudio.google.com/apikey>
+and create a new one.
+
+Prefer a GUI? Deploy first, then in the Cloudflare dashboard open
+*Workers & Pages → edunavigator-ai → Settings → Variables and Secrets →
+Add → Secret*, name it `GEMINI_API_KEY`, and paste the value there.
+
 `wrangler deploy` prints the Worker URL, e.g.
-`https://edunavigator-ai.<your-subdomain>.workers.dev`.
+`https://edunavigator-ai.<your-subdomain>.workers.dev`. That URL is not a
+secret — it is safe to commit in `src/config.js`.
 
 **4. Point the app at it** — put that URL in `src/config.js` as `AI_PROXY_URL`,
 then commit and push. GitHub Actions redeploys the site automatically.
