@@ -187,6 +187,27 @@
       border-color: #fff;
     }
 
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      align-self: flex-start;
+      margin-bottom: 26px;
+      padding: 14px 30px;
+      border-radius: 28px;
+      background: #fff;
+      color: #1565C0;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.18);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.24);
+    }
+
     /* ───────────────── BOOKS ILLUSTRATION ───────────────── */
     .hero-visual {
       position: relative;
@@ -344,7 +365,7 @@
 
 <!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
 <nav class="navbar">
-  <a class="logo" href="#">
+  <a class="logo" href="/">
     <div class="logo-badge">
       <span class="e">E</span><span class="n">N</span>
     </div>
@@ -352,10 +373,10 @@
   </a>
 
   <ul class="nav-links">
-    <li><a href="#" class="active">Bosh sahifa</a></li>
+    <li><a href="/" class="active">Bosh sahifa</a></li>
     <li><a href="#features">Bo'limlar</a></li>
-    <li><a href="#">Namunalar</a></li>
-    <li><a href="#">AI yordamchi</a></li>
+    <li><a href="/app/?screen=Samples">Namunalar</a></li>
+    <li><a href="/app/?screen=Resources">AI yordamchi</a></li>
     <li><a href="#">Biz haqimizda</a></li>
   </ul>
 
@@ -414,6 +435,8 @@
     </h1>
     <p class="hero-sub" id="hero-sub">Bilim oling, izlaning, yarating va muvaffaqiyatga erishing.</p>
 
+    <a class="hero-cta" href="/app/"><span id="hero-cta-label">Platformaga kirish</span> &rarr;</a>
+
     <div class="hero-lang-row">
       <button class="hero-lang active" onclick="setLang('uz', this)">🇺🇿 O'zbek</button>
       <button class="hero-lang" onclick="setLang('ru', this)">🇷🇺 Русский</button>
@@ -440,7 +463,7 @@
   <div class="features-card">
 
     <!-- Yo'riqnoma -->
-    <a href="#" class="feat">
+    <a href="/app/?screen=Guide" class="feat">
       <div class="feat-icon" style="background:#EEF2FF;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
@@ -453,7 +476,7 @@
     </a>
 
     <!-- So'rovnoma -->
-    <a href="#" class="feat">
+    <a href="/app/?screen=Survey" class="feat">
       <div class="feat-icon" style="background:#F3E5F5;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#6A1B9A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="5" y="2" width="14" height="20" rx="2"/>
@@ -470,7 +493,7 @@
     </a>
 
     <!-- Natijalar -->
-    <a href="#" class="feat">
+    <a href="/app/?screen=Results" class="feat">
       <div class="feat-icon" style="background:#E8F5E9;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="20" x2="18" y2="10"/>
@@ -484,7 +507,7 @@
     </a>
 
     <!-- Qonunlar -->
-    <a href="#" class="feat">
+    <a href="/app/?screen=Laws" class="feat">
       <div class="feat-icon" style="background:#FBE9E7;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#BF360C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 3v4M12 21v-2"/>
@@ -501,7 +524,7 @@
     </a>
 
     <!-- Saytlar -->
-    <a href="#" class="feat">
+    <a href="/app/?screen=Resources" class="feat">
       <div class="feat-icon" style="background:#E3F2FD;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/>
@@ -514,7 +537,7 @@
     </a>
 
     <!-- Namunalar -->
-    <a href="#" class="feat">
+    <a href="/app/?screen=Samples" class="feat">
       <div class="feat-icon" style="background:#E0F7FA;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#00695C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -528,7 +551,7 @@
     </a>
 
     <!-- AI yordamchi -->
-    <a href="#" class="feat">
+    <a href="/app/?screen=Resources" class="feat">
       <div class="feat-icon" style="background:#EDE7F6;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#4527A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="8" width="18" height="12" rx="3"/>
@@ -555,6 +578,7 @@
       flag: '🇺🇿', label: "O'zbek",
       title: "Ilmiy izlanishlaringiz\nuchun ishonchli raqamli\nhamroh!",
       sub: "Bilim oling, izlaning, yarating va muvaffaqiyatga erishing.",
+      cta: "Platformaga kirish",
       feats: [
         ["Yo'riqnoma", "Ilmiy ish yozish bosqichlari"],
         ["So'rovnoma", "Muammolarni aniqlash"],
@@ -569,6 +593,7 @@
       flag: '🇷🇺', label: "Русский",
       title: "Ваш надёжный цифровой\nпомощник в научных\nисследованиях!",
       sub: "Учитесь, исследуйте, создавайте и достигайте успеха.",
+      cta: "Войти на платформу",
       feats: [
         ["Руководство", "Этапы написания работы"],
         ["Опрос", "Выявление проблем"],
@@ -583,6 +608,7 @@
       flag: '🇬🇧', label: "English",
       title: "Your reliable digital\npartner for academic\nresearch!",
       sub: "Learn, explore, create and achieve success.",
+      cta: "Enter the platform",
       feats: [
         ["Guide", "Academic writing steps"],
         ["Survey", "Problem identification"],
@@ -605,6 +631,7 @@
     // update hero text
     document.getElementById('hero-title').innerHTML = l.title.replace(/\n/g, '<br>');
     document.getElementById('hero-sub').textContent = l.sub;
+    document.getElementById('hero-cta-label').textContent = l.cta;
 
     // update feature cards
     l.feats.forEach((f, i) => {

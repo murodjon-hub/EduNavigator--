@@ -35,8 +35,26 @@ jobs:
         run: |
           # Jekyll would strip the _expo/ directory, which holds the JS bundle.
           touch dist/.nojekyll
-          # Single-page app: unknown paths must still boot the app.
-          cp dist/index.html dist/404.html
+
+          # Landing page at /, the Expo app at /app/. The bundle stays at the
+          # root under _expo/, which is what the app shell's absolute script
+          # src already points at, so moving the shell down one level is safe.
+          mkdir -p dist/app
+          mv dist/index.html dist/app/index.html
+          cp index.html dist/index.html
+
+          # Front door for anything unrecognised.
+          cp index.html dist/404.html
+
+      - name: Verify the built layout
+        run: |
+          test -f dist/index.html
+          test -f dist/app/index.html
+          test -f dist/.nojekyll
+          test -f dist/CNAME
+          ls dist/_expo/static/js/web/*.js >/dev/null
+          grep -q 'hero-cta' dist/index.html
+          grep -q '/_expo/static/js/web/' dist/app/index.html
 
       # Requires Pages to be on for the repo, with "GitHub Actions" as the
       # source (Settings -> Pages). The default GITHUB_TOKEN cannot turn that

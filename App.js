@@ -27,9 +27,25 @@ const TAB_KEYS = [
   { key: 'Samples', icon: '📄' },
 ];
 
+// Screens reachable from Home rather than from the tab bar.
+const SUB_SCREEN_KEYS = ['Results', 'Laws'];
+
+// The landing page links straight at a section, e.g. /app/?screen=Guide.
+// Anything unrecognised just opens Home.
+function initialRouteFromUrl() {
+  if (typeof window === 'undefined' || !window.location) {
+    return { tab: 'Home', sub: null };
+  }
+  const requested = new URLSearchParams(window.location.search).get('screen');
+  if (TAB_KEYS.some((tb) => tb.key === requested)) return { tab: requested, sub: null };
+  if (SUB_SCREEN_KEYS.includes(requested)) return { tab: 'Home', sub: requested };
+  return { tab: 'Home', sub: null };
+}
+
 function AppContent() {
-  const [activeTab, setActiveTab] = useState('Home');
-  const [subScreen, setSubScreen] = useState(null);
+  const [initialRoute] = useState(initialRouteFromUrl);
+  const [activeTab, setActiveTab] = useState(initialRoute.tab);
+  const [subScreen, setSubScreen] = useState(initialRoute.sub);
   const { lang, setLang, t } = useLanguage();
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
