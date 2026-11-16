@@ -38,11 +38,10 @@ jobs:
           # Single-page app: unknown paths must still boot the app.
           cp dist/index.html dist/404.html
 
+      # Requires Pages to be on for the repo, with "GitHub Actions" as the
+      # source (Settings -> Pages). The default GITHUB_TOKEN cannot turn that
+      # on itself, so configure-pages' `enablement` input does not help here.
       - uses: actions/configure-pages@v5
-        with:
-          # Turn Pages on for the repo if it is not already, so no manual
-          # Settings change is needed for the first deploy.
-          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
