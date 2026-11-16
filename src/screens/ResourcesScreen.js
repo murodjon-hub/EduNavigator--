@@ -17,6 +17,7 @@ import {
 import { colors, spacing, borderRadius, typography } from '../theme/colors';
 import { useLanguage } from '../context/LanguageContext';
 import { useResponsive } from '../hooks/useResponsive';
+import { AI_PROXY_URL } from '../config';
 
 const RESOURCES = [
   {
@@ -181,29 +182,71 @@ export default function ResourcesScreen() {
   const { isDesktop } = useResponsive();
   const rt = t.resources;
   const [aiInput, setAiInput] = useState('');
+  const [isThinking, setIsThinking] = useState(false);
   const [messages, setMessages] = useState([{ role: 'ai', text: rt.ai_welcome }]);
   const scrollRef = useRef(null);
   const [activeSection, setActiveSection] = useState('resources');
 
-  const handleAiSend = () => {
-    if (!aiInput.trim()) return;
+  const scrollToEnd = () =>
+    setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+
+  // Used before the Worker is deployed, and whenever it cannot be reached.
+  const scriptedReply = (question) => {
+    const lower = question.toLowerCase();
+    if (lower.includes('bm') || lower.includes('bitiruv') || lower.includes('kirish')) {
+      return AI_RESPONSES.bm;
+    }
+    if (lower.includes('plagiarizm') || lower.includes('original')) {
+      return AI_RESPONSES.plagiarizm;
+    }
+    return AI_RESPONSES.default(question);
+  };
+
+  const handleAiSend = async () => {
+    if (!aiInput.trim() || isThinking) return;
     const userMsg = aiInput.trim();
     setAiInput('');
 
     const newMessages = [...messages, { role: 'user', text: userMsg }];
+    setMessages(newMessages);
+    scrollToEnd();
 
-    let response;
-    const lower = userMsg.toLowerCase();
-    if (lower.includes('bm') || lower.includes('bitiruv') || lower.includes('kirish')) {
-      response = AI_RESPONSES.bm;
-    } else if (lower.includes('plagiarizm') || lower.includes('original')) {
-      response = AI_RESPONSES.plagiarizm;
-    } else {
-      response = AI_RESPONSES.default(userMsg);
+    if (!AI_PROXY_URL) {
+      setMessages([...newMessages, { role: 'ai', text: scriptedReply(userMsg) }]);
+      scrollToEnd();
+      return;
     }
 
-    setMessages([...newMessages, { role: 'ai', text: response }]);
-    setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+    setIsThinking(true);
+    try {
+      const res = await fetch(AI_PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: userMsg,
+          // Skip the welcome bubble — it is UI copy, not part of the conversation.
+          history: messages.slice(1).map((m) => ({ role: m.role, text: m.text })),
+        }),
+      });
+
+      if (!res.ok) {
+        const { error } = await res.json().catch(() => ({}));
+        setMessages([
+          ...newMessages,
+          { role: 'ai', text: error === 'rate_limited' ? rt.ai_busy : rt.ai_error },
+        ]);
+        return;
+      }
+
+      const { answer } = await res.json();
+      setMessages([...newMessages, { role: 'ai', text: answer }]);
+    } catch {
+      // Offline or the Worker is down: still give the student something useful.
+      setMessages([...newMessages, { role: 'ai', text: scriptedReply(userMsg) }]);
+    } finally {
+      setIsThinking(false);
+      scrollToEnd();
+    }
   };
 
   return (
@@ -325,7 +368,16 @@ export default function ResourcesScreen() {
                 </Text>
               </View>
             ))}
+
+            {isThinking && (
+              <View style={[styles.messageBubble, styles.aiBubble]}>
+                <Text style={[styles.messageText, styles.aiText]}>{rt.ai_thinking}</Text>
+              </View>
+            )}
           </ScrollView>
+
+          {/* Free-tier prompts are used by Google for training — say so plainly. */}
+          {!!AI_PROXY_URL && <Text style={styles.aiNotice}>{rt.ai_notice}</Text>}
 
           {/* Input */}
           <View style={styles.inputRow}>
@@ -337,11 +389,15 @@ export default function ResourcesScreen() {
               placeholderTextColor={colors.textLight}
               multiline
               maxLength={300}
+              editable={!isThinking}
             />
             <TouchableOpacity
-              style={[styles.sendButton, !aiInput.trim() && styles.sendButtonDisabled]}
+              style={[
+                styles.sendButton,
+                (!aiInput.trim() || isThinking) && styles.sendButtonDisabled,
+              ]}
               onPress={handleAiSend}
-              disabled={!aiInput.trim()}
+              disabled={!aiInput.trim() || isThinking}
             >
               <Text style={styles.sendIcon}>➤</Text>
             </TouchableOpacity>
@@ -529,6 +585,15 @@ const styles = StyleSheet.create({
   },
   aiText: {
     color: colors.text,
+  },
+  aiNotice: {
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    fontSize: 11,
+    lineHeight: 15,
+    color: colors.textLight,
+    textAlign: 'center',
+    backgroundColor: colors.surface,
   },
   inputRow: {
     flexDirection: 'row',

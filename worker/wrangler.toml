@@ -1,0 +1,10 @@
+name = "edunavigator-ai"
+main = "gemini-proxy.js"
+compatibility_date = "2024-11-01"
+
+# GEMINI_API_KEY is a secret, never put it here — this file is committed.
+# Set it with:  npx wrangler secret put GEMINI_API_KEY
+#
+# To use a different model than the default, uncomment and edit:
+# [vars]
+# GEMINI_MODEL = "gemini-3.5-flash-lite"
