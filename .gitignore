@@ -22,3 +22,6 @@ yarn-error.*
 
 # macOS
 .DS_Store
+
+# Scratch output from tools/cutout_hero.py
+tools/_preview.png

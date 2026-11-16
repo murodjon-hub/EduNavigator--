@@ -4,360 +4,270 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EduNavigator — Ilmiy izlanishlar platformasi</title>
+  <meta name="description" content="Ilmiy ish yozish bo'yicha yordamchi platforma — yo'riqnoma, namunalar, qonunlar va AI yordamchi." />
+  <meta name="theme-color" content="#1565C0" />
+  <link rel="icon" href="/favicon.ico" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f0f4ff;
-      color: #0d1b2a;
-      min-height: 100vh;
+    :root {
+      --ink:      #16294D;
+      --ink-soft: #5B6B86;
+      --blue:     #1565C0;
+      --blue-dk:  #0F4C94;
+      --yellow:   #FFC53D;
+      --line:     #E8EEF7;
+      /* Matches the plate the hero illustration was cut from, so its
+         feathered edges fade into the page instead of showing a box. */
+      --plate:    #A4D1FD;
     }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #F3F9FF;
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap { max-width: 1320px; margin: 0 auto; padding: 0 22px; }
 
     /* ───────────────────────── NAVBAR ───────────────────────── */
     .navbar {
+      position: sticky;
+      top: 14px;
+      z-index: 100;
+      margin: 14px auto 0;
+      max-width: 1320px;
+      width: calc(100% - 28px);
       background: #fff;
-      height: 68px;
+      border-radius: 20px;
+      height: 72px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 56px;
-      box-shadow: 0 2px 20px rgba(21,101,192,0.10);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      padding: 0 26px;
+      box-shadow: 0 8px 28px rgba(21, 101, 192, 0.10);
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      text-decoration: none;
-    }
-
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
     .logo-badge {
-      width: 42px;
-      height: 42px;
-      background: #1565C0;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 15px;
-      font-weight: 900;
-      letter-spacing: -1px;
-      gap: 1px;
-      box-shadow: 0 4px 12px rgba(21,101,192,0.35);
+      width: 44px; height: 44px;
+      border-radius: 14px;
+      background: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 800; font-size: 16px; letter-spacing: 0.5px;
+      box-shadow: 0 5px 14px rgba(21, 101, 192, 0.35);
     }
-    .logo-badge .e { color: #FFD700; }
-    .logo-badge .n { color: #fff; }
+    .logo-text { font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: -0.3px; }
 
-    .logo-text {
-      font-size: 21px;
-      font-weight: 800;
-      color: #0d1b2a;
-      letter-spacing: 0.2px;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 36px;
-      list-style: none;
-    }
-
+    .nav-links { display: flex; gap: 34px; list-style: none; }
     .nav-links a {
       text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      color: #455a64;
-      transition: color 0.2s;
-      white-space: nowrap;
+      color: var(--ink-soft);
+      font-size: 15px;
+      font-weight: 600;
+      padding-bottom: 5px;
+      transition: color 0.18s;
     }
-    .nav-links a:hover { color: #1565C0; }
-    .nav-links a.active { color: #1565C0; font-weight: 700; }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-links a.active { color: var(--blue); border-bottom: 3px solid var(--blue); }
 
     .nav-lang-btn {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 16px;
-      border: 1.5px solid #e3eaf8;
+      display: flex; align-items: center; gap: 8px;
+      padding: 11px 18px;
       border-radius: 24px;
+      border: 1.5px solid var(--line);
       background: #fff;
-      font-size: 13px;
-      font-weight: 600;
-      color: #455a64;
+      color: var(--ink);
+      font-size: 14px; font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
       font-family: inherit;
-      white-space: nowrap;
+      transition: border-color 0.18s;
     }
-    .nav-lang-btn:hover { border-color: #1565C0; color: #1565C0; }
+    .nav-lang-btn:hover { border-color: #C7DBF5; }
 
     /* ───────────────────────── HERO ───────────────────────── */
     .hero {
-      background: linear-gradient(115deg,
-        #0d3d91 0%,
-        #1565C0 22%,
-        #1976D2 48%,
-        #2196F3 72%,
-        #64B5F6 100%
-      );
-      padding: 64px 80px 130px 80px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 40px;
       position: relative;
       overflow: hidden;
-      min-height: 420px;
+      /* Settles on --plate well before the illustration starts, so its
+         feathered edges dissolve into an identical colour. */
+      background: linear-gradient(100deg, #F5FAFF 0%, #E4F0FE 32%, var(--plate) 58%, var(--plate) 100%);
     }
 
-    /* Subtle radial glow on right */
+    /* The hero otherwise ends on a hard horizontal line either side of the
+       feature card, where it meets the page background. */
     .hero::after {
       content: '';
       position: absolute;
-      right: 5%;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(100,181,246,0.35) 0%, transparent 65%);
+      left: 0; right: 0; bottom: 0;
+      height: 170px;
+      background: linear-gradient(to bottom, rgba(243, 249, 255, 0) 0%, #F3F9FF 92%);
       pointer-events: none;
     }
 
-    /* Network pattern SVG */
-    .hero-net {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      opacity: 0.18;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 3;
-      flex: 1;
-      max-width: 530px;
+    .hero-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 54px 22px 120px;
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      align-items: center;
+      gap: 26px;
     }
 
     .hero-title {
-      font-size: 42px;
-      font-weight: 900;
-      color: #fff;
-      line-height: 1.17;
-      margin-bottom: 18px;
-      letter-spacing: -0.5px;
+      font-size: clamp(32px, 4.6vw, 60px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      color: var(--ink);
+    }
+    /* The accent word carries the yellow swash from the design. */
+    .accent {
+      color: var(--blue);
+      background-image: linear-gradient(var(--yellow), var(--yellow));
+      background-repeat: no-repeat;
+      background-size: 100% 11px;
+      background-position: 0 92%;
+      border-radius: 2px;
+      padding: 0 2px;
     }
 
     .hero-sub {
-      font-size: 15px;
-      color: rgba(255,255,255,0.84);
-      line-height: 1.65;
-      margin-bottom: 30px;
+      margin-top: 22px;
+      font-size: clamp(15px, 1.35vw, 19px);
+      line-height: 1.6;
+      color: #44556F;
+      max-width: 540px;
     }
 
-    .hero-lang-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
 
-    .hero-lang {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 9px 18px;
-      border-radius: 24px;
-      border: 1.5px solid rgba(255,255,255,0.42);
-      background: rgba(255,255,255,0.14);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-family: inherit;
-    }
-    .hero-lang:hover, .hero-lang.active {
-      background: #fff;
-      color: #1565C0;
-      border-color: #fff;
-    }
-
-    .hero-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      align-self: flex-start;
-      margin-bottom: 26px;
-      padding: 14px 30px;
-      border-radius: 28px;
-      background: #fff;
-      color: #1565C0;
-      font-size: 15px;
-      font-weight: 700;
+    .btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 16px 32px;
+      border-radius: 30px;
+      font-size: 15px; font-weight: 700;
       text-decoration: none;
-      box-shadow: 0 6px 22px rgba(0,0,0,0.18);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.18s, box-shadow 0.18s;
+      white-space: nowrap;
     }
-    .hero-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.24);
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 10px 26px rgba(21, 101, 192, 0.32);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(21, 101, 192, 0.40); }
+    .btn-ghost {
+      background: #fff;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+    }
+    .btn-ghost:hover { transform: translateY(-2px); background: #F4F9FF; }
+
+    .hero-lang-row { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 26px; }
+    .hero-lang {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px;
+      border-radius: 24px;
+      border: 1.5px solid var(--line);
+      background: #fff;
+      color: #334155;
+      font-size: 13.5px; font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.18s;
+    }
+    .hero-lang:hover { border-color: #C7DBF5; }
+    .hero-lang.active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+      box-shadow: 0 7px 18px rgba(21, 101, 192, 0.30);
+    }
+    .flag { font-size: 15px; line-height: 1; }
+
+    .hero-visual { display: flex; justify-content: flex-end; align-items: center; }
+    .hero-visual img {
+      width: 100%;
+      max-width: 660px;
+      height: auto;
+      display: block;
     }
 
-    /* ───────────────── BOOKS ILLUSTRATION ───────────────── */
-    .hero-visual {
-      position: relative;
-      z-index: 3;
-      flex: 0 0 340px;
-      height: 280px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    .books-wrap {
-      position: relative;
-      width: 260px;
-      height: 260px;
-    }
-
-    /* Glowing circle behind books */
-    .books-glow {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 240px;
-      height: 240px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(144,202,249,0.30) 0%, transparent 70%);
-      border: 1px solid rgba(144,202,249,0.20);
-    }
-
-    .books-stack {
-      position: absolute;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-      filter: drop-shadow(0 16px 32px rgba(0,0,0,0.28));
-    }
-
-    .grad-cap {
-      font-size: 68px;
-      line-height: 1;
-      margin-bottom: -6px;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
-    }
-
-    .book {
-      border-radius: 5px;
-      position: relative;
-    }
-
-    .book::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 12px;
-      border-radius: 5px 0 0 5px;
-      background: rgba(0,0,0,0.18);
-    }
-
-    .book-1 {
-      width: 210px;
-      height: 42px;
-      background: linear-gradient(180deg, #1565C0 0%, #0d47a1 100%);
-      box-shadow: 0 6px 18px rgba(13,71,161,0.5);
-    }
-    .book-2 {
-      width: 195px;
-      height: 44px;
-      background: linear-gradient(180deg, #ff9800 0%, #e65100 100%);
-      box-shadow: 0 6px 18px rgba(230,81,0,0.45);
-    }
-    .book-3 {
-      width: 220px;
-      height: 46px;
-      background: linear-gradient(180deg, #43a047 0%, #2e7d32 100%);
-      box-shadow: 0 8px 24px rgba(46,125,50,0.50);
-    }
-
-    /* ───────────────────────── FEATURES ───────────────────────── */
-    .features-wrap {
-      padding: 0 64px 56px;
-      margin-top: -68px;
-      position: relative;
-      z-index: 10;
-    }
-
+    /* ───────────────────── FEATURE CARDS ───────────────────── */
+    .features-wrap { margin-top: -72px; padding-bottom: 60px; position: relative; z-index: 5; }
     .features-card {
       background: #fff;
-      border-radius: 22px;
-      padding: 10px 16px;
-      display: flex;
-      justify-content: space-around;
-      box-shadow: 0 12px 56px rgba(21,101,192,0.14);
+      border-radius: 26px;
+      box-shadow: 0 14px 44px rgba(21, 101, 192, 0.13);
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      overflow: hidden;
     }
 
     .feat {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: flex; flex-direction: column; align-items: center;
       text-align: center;
-      padding: 18px 12px;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: background 0.18s;
-      flex: 1;
-      max-width: 130px;
+      padding: 30px 14px;
       text-decoration: none;
-      color: inherit;
+      border-right: 1px solid #F1F6FC;
+      transition: background 0.18s, transform 0.18s;
     }
-    .feat:hover { background: #eef2ff; }
+    .feat:last-child { border-right: none; }
+    .feat:hover { background: #F7FBFF; transform: translateY(-3px); }
 
     .feat-icon {
-      width: 54px;
-      height: 54px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 10px;
+      width: 56px; height: 56px;
+      border-radius: 17px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .feat-icon svg { width: 27px; height: 27px; }
+    .feat-title { font-size: 14.5px; font-weight: 700; color: var(--ink); margin-bottom: 5px; line-height: 1.3; }
+    .feat-desc { font-size: 12.5px; color: #90A1B8; line-height: 1.45; }
+
+    /* ───────────────────────── FOOTER ───────────────────────── */
+    .footer {
+      text-align: center;
+      padding: 0 22px 46px;
+      color: #93A3B9;
+      font-size: 13.5px;
+      line-height: 1.7;
+    }
+    .footer a { color: var(--blue); text-decoration: none; font-weight: 600; }
+
+    /* ───────────────────────── RESPONSIVE ───────────────────────── */
+    @media (max-width: 1100px) {
+      .features-card { grid-template-columns: repeat(4, 1fr); }
+      .feat:nth-child(4n) { border-right: none; }
+      .feat { border-bottom: 1px solid #F1F6FC; }
     }
 
-    .feat-icon svg {
-      width: 28px;
-      height: 28px;
+    @media (max-width: 920px) {
+      .nav-links { display: none; }
+      .hero-inner {
+        grid-template-columns: 1fr;
+        padding: 38px 22px 110px;
+        text-align: center;
+      }
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-actions, .hero-lang-row { justify-content: center; }
+      .hero-visual { order: -1; justify-content: center; margin-bottom: 10px; }
+      .hero-visual img { max-width: 480px; }
     }
 
-    .feat-title {
-      font-size: 12.5px;
-      font-weight: 700;
-      color: #0d1b2a;
-      margin-bottom: 4px;
-      line-height: 1.3;
-    }
-
-    .feat-desc {
-      font-size: 10.5px;
-      color: #78909c;
-      line-height: 1.45;
-    }
-
-    /* ───────────────────────── FOOTER AREA (optional) ───────────────────────── */
-    .page-bg {
-      background: #f0f4ff;
-      min-height: 40px;
+    @media (max-width: 640px) {
+      .navbar { height: 64px; padding: 0 16px; border-radius: 17px; }
+      .logo-badge { width: 38px; height: 38px; border-radius: 12px; font-size: 14px; }
+      .logo-text { font-size: 19px; }
+      .features-card { grid-template-columns: repeat(2, 1fr); }
+      .feat:nth-child(4n) { border-right: 1px solid #F1F6FC; }
+      .feat:nth-child(2n) { border-right: none; }
+      .btn { padding: 14px 24px; font-size: 14.5px; }
+      .features-wrap { margin-top: -56px; }
     }
   </style>
 </head>
@@ -366,22 +276,19 @@
 <!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
 <nav class="navbar">
   <a class="logo" href="/">
-    <div class="logo-badge">
-      <span class="e">E</span><span class="n">N</span>
-    </div>
+    <div class="logo-badge">EN</div>
     <span class="logo-text">EduNavigator</span>
   </a>
 
   <ul class="nav-links">
-    <li><a href="/" class="active">Bosh sahifa</a></li>
-    <li><a href="#features">Bo'limlar</a></li>
-    <li><a href="/app/?screen=Samples">Namunalar</a></li>
-    <li><a href="/app/?screen=Resources">AI yordamchi</a></li>
-    <li><a href="#">Biz haqimizda</a></li>
+    <li><a href="/" class="active" id="nav-1">Bosh sahifa</a></li>
+    <li><a href="#features" id="nav-2">Bo'limlar</a></li>
+    <li><a href="/app/?screen=Samples" id="nav-3">Namunalar</a></li>
+    <li><a href="/app/?screen=Resources" id="nav-4">AI yordamchi</a></li>
   </ul>
 
-  <button class="nav-lang-btn" onclick="cycleLang(this)">
-    <span id="nav-flag">🇺🇿</span>
+  <button class="nav-lang-btn" onclick="cycleLang()">
+    <span class="flag" id="nav-flag">🇺🇿</span>
     <span id="nav-lang-label">O'zbek</span>
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
   </button>
@@ -389,77 +296,34 @@
 
 <!-- ═══════════════════════ HERO ═══════════════════════ -->
 <section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <h1 class="hero-title" id="hero-title">
+        Ilmiy izlanishlaringiz uchun ishonchli raqamli <span class="accent">hamroh!</span>
+      </h1>
+      <p class="hero-sub" id="hero-sub">Bilim oling, izlaning, yarating va muvaffaqiyatga erishing.</p>
 
-  <!-- Network background pattern -->
-  <svg class="hero-net" viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-    <g stroke="white" stroke-width="1" fill="white">
-      <!-- nodes -->
-      <circle cx="620" cy="60"  r="3.5"/>
-      <circle cx="780" cy="40"  r="2.5"/>
-      <circle cx="900" cy="110" r="4"/>
-      <circle cx="1050" cy="70" r="2.5"/>
-      <circle cx="1140" cy="190" r="3"/>
-      <circle cx="1080" cy="320" r="3.5"/>
-      <circle cx="950" cy="400" r="2.5"/>
-      <circle cx="800" cy="380" r="4"/>
-      <circle cx="680" cy="300" r="2.5"/>
-      <circle cx="720" cy="190" r="3"/>
-      <circle cx="860" cy="220" r="3.5"/>
-      <circle cx="1010" cy="200" r="2.5"/>
-      <circle cx="580" cy="160" r="2.5"/>
-      <!-- lines -->
-      <line x1="620" y1="60" x2="780" y2="40"/>
-      <line x1="780" y1="40" x2="900" y2="110"/>
-      <line x1="900" y1="110" x2="1050" y2="70"/>
-      <line x1="1050" y1="70" x2="1140" y2="190"/>
-      <line x1="1140" y1="190" x2="1080" y2="320"/>
-      <line x1="1080" y1="320" x2="950" y2="400"/>
-      <line x1="950" y1="400" x2="800" y2="380"/>
-      <line x1="800" y1="380" x2="680" y2="300"/>
-      <line x1="680" y1="300" x2="720" y2="190"/>
-      <line x1="720" y1="190" x2="620" y2="60"/>
-      <line x1="720" y1="190" x2="860" y2="220"/>
-      <line x1="860" y1="220" x2="900" y2="110"/>
-      <line x1="860" y1="220" x2="1010" y2="200"/>
-      <line x1="1010" y1="200" x2="1050" y2="70"/>
-      <line x1="1010" y1="200" x2="1080" y2="320"/>
-      <line x1="580" y1="160" x2="620" y2="60"/>
-      <line x1="580" y1="160" x2="720" y2="190"/>
-    </g>
-  </svg>
-
-  <!-- Left: text content -->
-  <div class="hero-content">
-    <h1 class="hero-title" id="hero-title">
-      Ilmiy izlanishlaringiz<br>uchun ishonchli raqamli<br>hamroh!
-    </h1>
-    <p class="hero-sub" id="hero-sub">Bilim oling, izlaning, yarating va muvaffaqiyatga erishing.</p>
-
-    <a class="hero-cta" href="/app/"><span id="hero-cta-label">Platformaga kirish</span> &rarr;</a>
-
-    <div class="hero-lang-row">
-      <button class="hero-lang active" onclick="setLang('uz', this)">🇺🇿 O'zbek</button>
-      <button class="hero-lang" onclick="setLang('ru', this)">🇷🇺 Русский</button>
-      <button class="hero-lang" onclick="setLang('en', this)">🇬🇧 English</button>
-    </div>
-  </div>
-
-  <!-- Right: books illustration -->
-  <div class="hero-visual">
-    <div class="books-wrap">
-      <div class="books-glow"></div>
-      <div class="books-stack">
-        <div class="grad-cap">🎓</div>
-        <div class="book book-2"></div>
-        <div class="book book-3"></div>
-        <div class="book book-1"></div>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/app/"><span id="hero-cta-label">Platformaga kirish</span> &rarr;</a>
+        <a class="btn btn-ghost" href="#features"><span id="hero-cta2-label">Bo'limlarni ko'rish</span></a>
       </div>
+
+      <div class="hero-lang-row">
+        <button class="hero-lang active" onclick="setLang('uz', this)"><span class="flag">🇺🇿</span> O'zbek</button>
+        <button class="hero-lang" onclick="setLang('ru', this)"><span class="flag">🇷🇺</span> Русский</button>
+        <button class="hero-lang" onclick="setLang('en', this)"><span class="flag">🇬🇧</span> English</button>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <img src="/hero-student.webp" width="842" height="593"
+           alt="Ilmiy ish ustida ishlayotgan talaba" />
     </div>
   </div>
 </section>
 
 <!-- ═══════════════════════ FEATURE CARDS ═══════════════════════ -->
-<div class="features-wrap" id="features">
+<div class="wrap features-wrap" id="features">
   <div class="features-card">
 
     <!-- Yo'riqnoma -->
@@ -477,7 +341,7 @@
 
     <!-- So'rovnoma -->
     <a href="/app/?screen=Survey" class="feat">
-      <div class="feat-icon" style="background:#F3E5F5;">
+      <div class="feat-icon" style="background:#F6EEFC;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#6A1B9A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="5" y="2" width="14" height="20" rx="2"/>
           <line x1="9" y1="7" x2="15" y2="7"/>
@@ -494,7 +358,7 @@
 
     <!-- Natijalar -->
     <a href="/app/?screen=Results" class="feat">
-      <div class="feat-icon" style="background:#E8F5E9;">
+      <div class="feat-icon" style="background:#E9F7EC;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="20" x2="18" y2="10"/>
           <line x1="12" y1="20" x2="12" y2="4"/>
@@ -508,7 +372,7 @@
 
     <!-- Qonunlar -->
     <a href="/app/?screen=Laws" class="feat">
-      <div class="feat-icon" style="background:#FBE9E7;">
+      <div class="feat-icon" style="background:#FDEEE9;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#BF360C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 3v4M12 21v-2"/>
           <path d="M5 7l2 9M19 7l-2 9"/>
@@ -525,7 +389,7 @@
 
     <!-- Saytlar -->
     <a href="/app/?screen=Resources" class="feat">
-      <div class="feat-icon" style="background:#E3F2FD;">
+      <div class="feat-icon" style="background:#E8F3FE;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#0277BD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="10"/>
           <line x1="2" y1="12" x2="22" y2="12"/>
@@ -538,7 +402,7 @@
 
     <!-- Namunalar -->
     <a href="/app/?screen=Samples" class="feat">
-      <div class="feat-icon" style="background:#E0F7FA;">
+      <div class="feat-icon" style="background:#E4F6F7;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#00695C" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
           <polyline points="14 2 14 8 20 8"/>
@@ -552,7 +416,7 @@
 
     <!-- AI yordamchi -->
     <a href="/app/?screen=Resources" class="feat">
-      <div class="feat-icon" style="background:#EDE7F6;">
+      <div class="feat-icon" style="background:#EFEBFA;">
         <svg viewBox="0 0 24 24" fill="none" stroke="#4527A0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="8" width="18" height="12" rx="3"/>
           <path d="M8 8V6a4 4 0 0 1 8 0v2"/>
@@ -569,16 +433,22 @@
   </div>
 </div>
 
-<div class="page-bg"></div>
+<footer class="footer">
+  <div id="footer-text">EduNavigator — ilmiy ish yozish bo'yicha yordamchi platforma</div>
+  <div>© 2026 O'rinboyeva Umida · <a href="/app/">edunavigator.site</a></div>
+</footer>
 
-<!-- ═══════════════════════ LANGUAGE SCRIPT ═══════════════════════ -->
 <script>
   const LANGS = {
     uz: {
       flag: '🇺🇿', label: "O'zbek",
-      title: "Ilmiy izlanishlaringiz\nuchun ishonchli raqamli\nhamroh!",
+      title: "Ilmiy izlanishlaringiz uchun ishonchli raqamli ",
+      accent: "hamroh!",
       sub: "Bilim oling, izlaning, yarating va muvaffaqiyatga erishing.",
       cta: "Platformaga kirish",
+      cta2: "Bo'limlarni ko'rish",
+      nav: ["Bosh sahifa", "Bo'limlar", "Namunalar", "AI yordamchi"],
+      footer: "EduNavigator — ilmiy ish yozish bo'yicha yordamchi platforma",
       feats: [
         ["Yo'riqnoma", "Ilmiy ish yozish bosqichlari"],
         ["So'rovnoma", "Muammolarni aniqlash"],
@@ -591,9 +461,13 @@
     },
     ru: {
       flag: '🇷🇺', label: "Русский",
-      title: "Ваш надёжный цифровой\nпомощник в научных\nисследованиях!",
+      title: "Ваш надёжный цифровой помощник в научных ",
+      accent: "исследованиях!",
       sub: "Учитесь, исследуйте, создавайте и достигайте успеха.",
       cta: "Войти на платформу",
+      cta2: "Посмотреть разделы",
+      nav: ["Главная", "Разделы", "Образцы", "ИИ помощник"],
+      footer: "EduNavigator — платформа помощи в написании научных работ",
       feats: [
         ["Руководство", "Этапы написания работы"],
         ["Опрос", "Выявление проблем"],
@@ -606,9 +480,13 @@
     },
     en: {
       flag: '🇬🇧', label: "English",
-      title: "Your reliable digital\npartner for academic\nresearch!",
+      title: "Your reliable digital partner for academic ",
+      accent: "research!",
       sub: "Learn, explore, create and achieve success.",
       cta: "Enter the platform",
+      cta2: "Browse the sections",
+      nav: ["Home", "Sections", "Samples", "AI Assistant"],
+      footer: "EduNavigator — a helper platform for academic writing",
       feats: [
         ["Guide", "Academic writing steps"],
         ["Survey", "Problem identification"],
@@ -621,37 +499,43 @@
     },
   };
 
+  const ORDER = ['uz', 'ru', 'en'];
+  let current = 'uz';
+
   function setLang(code, btn) {
     const l = LANGS[code];
+    if (!l) return;
+    current = code;
 
-    // update nav
+    document.documentElement.lang = code;
     document.getElementById('nav-flag').textContent = l.flag;
     document.getElementById('nav-lang-label').textContent = l.label;
 
-    // update hero text
-    document.getElementById('hero-title').innerHTML = l.title.replace(/\n/g, '<br>');
+    document.getElementById('hero-title').innerHTML =
+      l.title + '<span class="accent">' + l.accent + '</span>';
     document.getElementById('hero-sub').textContent = l.sub;
     document.getElementById('hero-cta-label').textContent = l.cta;
+    document.getElementById('hero-cta2-label').textContent = l.cta2;
+    document.getElementById('footer-text').textContent = l.footer;
 
-    // update feature cards
-    l.feats.forEach((f, i) => {
-      document.getElementById('feat-' + (i+1) + '-title').textContent = f[0];
-      document.getElementById('feat-' + (i+1) + '-desc').textContent  = f[1];
+    l.nav.forEach((label, i) => {
+      const el = document.getElementById('nav-' + (i + 1));
+      if (el) el.textContent = label;
     });
 
-    // toggle active button in hero
-    document.querySelectorAll('.hero-lang').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    l.feats.forEach((f, i) => {
+      document.getElementById('feat-' + (i + 1) + '-title').textContent = f[0];
+      document.getElementById('feat-' + (i + 1) + '-desc').textContent = f[1];
+    });
+
+    const buttons = document.querySelectorAll('.hero-lang');
+    buttons.forEach((b) => b.classList.remove('active'));
+    const target = btn || buttons[ORDER.indexOf(code)];
+    if (target) target.classList.add('active');
   }
 
-  function cycleLang(btn) {
-    const codes = ['uz', 'ru', 'en'];
-    const labels = ['uz', 'ru', 'en'];
-    const current = document.getElementById('nav-lang-label').textContent;
-    const currentIdx = ['O\'zbek', 'Русский', 'English'].indexOf(current);
-    const next = (currentIdx + 1) % 3;
-    const heroBtn = document.querySelectorAll('.hero-lang')[next];
-    setLang(labels[next], heroBtn);
+  function cycleLang() {
+    setLang(ORDER[(ORDER.indexOf(current) + 1) % ORDER.length]);
   }
 </script>
 
